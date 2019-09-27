@@ -47,7 +47,7 @@ def playerselect(screen):
 # -----Initializing the game-------
 def init():
     pygame.init()  # initialize pygame module
-    logo = pygame.image.load("logo32x32.png")  # Load logo
+    logo = pygame.image.load("resources/logo32x32.png")  # Load logo
     pygame.display.set_icon(logo)  # Set logo
     pygame.display.set_caption("Pong")  # Set window Title
     screen = pygame.display.set_mode((screenWidth, screenHeight))  # Surface on screen with size 240x180
@@ -69,8 +69,8 @@ def updatePos(xPos, yPos, oldRect, screen, image):
 def main(screen, playerCount):
     running = True  # Variable for main loop control
 
-    playerImg = pygame.image.load("player.png")  # Load the player image
-    ballImg = pygame.image.load("ball.png")
+    playerImg = pygame.image.load("resources/player.png")  # Load the player image
+    ballImg = pygame.image.load("resources/ball.png")
 
     screen.fill((0, 0, 0))  # Fill the background with one colour (black)
 
