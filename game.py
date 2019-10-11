@@ -74,13 +74,13 @@ def main(screen, playerCount):
 
     screen.fill((0, 0, 0))  # Fill the background with one colour (black)
 
-    playerWidth = playerImg.get_width()  # Width of the player
-    playerHeight = playerImg.get_height()  # Height of the player
-    xpos1 = 20  # X-Position of the player 1
-    xpos2 = screenWidth - 20 - playerWidth  # X-Position of the player 2
-    ypos1 = screenHeight / 2 - playerHeight / 2  # Y-Position of the player 1
-    ypos2 = ypos1  # Y-Position of the player 2
-    stepP = 10  # Pixels the player moves per frame (speed)
+    playerWidth = playerImg.get_width()         # Width of the player
+    playerHeight = playerImg.get_height()       # Height of the player
+    xpos1 = 20                                  # X-Position of the player 1
+    xpos2 = screenWidth - 20 - playerWidth      # X-Position of the player 2
+    ypos1 = screenHeight / 2 - playerHeight / 2 # Y-Position of the player 1
+    ypos2 = ypos1                               # Y-Position of the player 2
+    stepP = 10                                  # Pixels the player moves per frame (speed)
 
     ballWidth = ballImg.get_width()  # Width of the ball
     ballHeight = ballImg.get_height()  # Height of the ball
@@ -159,6 +159,21 @@ def main(screen, playerCount):
             if event.type == pygame.KEYUP and event.key == pygame.K_w:
                 wPressed = False
 
+            # --- Bot for one player gamming --- #
+        if playerCount == 1:
+            if yposB + 1 + stepP > ypos2:
+                #upPressed = False
+                #downPressed = True
+                ypos2 += stepP
+                curRects[1] = updatePos(xpos2, ypos2, lastRects[1], screen, playerImg)
+                lastRects[1] = curRects[1]
+            if yposB - 1 - stepP < ypos2:
+                #downPressed = False
+                #upPressed = True
+                ypos2 -= stepP
+                curRects[1] = updatePos(xpos2, ypos2, lastRects[1], screen, playerImg)
+                lastRects[1] = curRects[1]
+
         # Actually moves the players if a key is pressed
         # First player
         if sPressed and ypos1 <= screenHeight - stepP - (playerHeight//2):
@@ -178,7 +193,6 @@ def main(screen, playerCount):
             ypos2 -= stepP
             curRects[1] = updatePos(xpos2, ypos2, lastRects[1], screen, playerImg)
             lastRects[1] = curRects[1]
-
 
 
 if __name__ == "__main__":  # Only if the script is called as main script not if its imported as a module
