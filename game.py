@@ -130,13 +130,15 @@ def main(screen, playerCount):
             lastRects[2] = curRects[2]
 
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:  # Event type = quit:
-                running = False  # Change running to False -> Main loop quits
+            if event.type == pygame.QUIT:   # Event type = quit:
+                running = False             # Change running to False -> Main loop quits
 
+            # Switches firstStart variable if the game is started
             if firstStart:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     firstStart = False
-
+           
+            # Switches the variables for the key pressed when they are pressed or released
             if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
                 downPressed = True
             if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
