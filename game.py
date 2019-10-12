@@ -13,8 +13,15 @@ def playerselect(screen):
     font = pygame.font.SysFont("arialroundedmtbold", 18)
     textP1 = font.render("1 Player", True, (0, 0, 0), (255, 255, 255))
     textP2 = font.render("2 Player", True, (255, 255, 255), (0, 0, 0))
-    screen.blit(textP1, (10, 10))
-    screen.blit(textP2, (10, 10 + textP1.get_height() + 10))
+
+    logoText = pygame.font.SysFont("arialroundedmtbold", 192, bold=1).render("Pong", True, (255, 255, 255), (0, 0, 0))
+
+    menu_start_pos_y = screenHeight * 0.7
+
+    screen.blit(textP1, ((screenWidth / 2) - (textP1.get_width() / 2), menu_start_pos_y))
+    screen.blit(textP2, ((screenWidth / 2) - (textP2.get_width() / 2), menu_start_pos_y + textP1.get_height() + 10))
+    screen.blit(logoText, ((screenWidth / 2) - (logoText.get_width() / 2), screenHeight * 0.2))
+
     pygame.display.flip()
 
     selectedP = 1
@@ -37,8 +44,8 @@ def playerselect(screen):
                     selectedP = 1
                     textP1 = font.render("1 Player", True, (0, 0, 0), (255, 255, 255))
                     textP2 = font.render("2 Player", True, (255, 255, 255), (0, 0, 0))
-                screen.blit(textP1, (10, 10))
-                screen.blit(textP2, (10, 10 + textP1.get_height() + 10))
+                screen.blit(textP1, ((screenWidth / 2) - (textP1.get_width() / 2), menu_start_pos_y))
+                screen.blit(textP2, ((screenWidth / 2) - (textP2.get_width() / 2), menu_start_pos_y + textP1.get_height() + 10))
                 pygame.display.flip()
     if startgame:
         main(screen, selectedP)
