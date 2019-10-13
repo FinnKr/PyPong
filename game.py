@@ -118,12 +118,38 @@ def main(screen, playerCount):
                 yposB = screenHeight/2 - ballHeight/2 - ystepB
             if (yposB >= screenHeight) or (yposB <= 0):
                 ystepB = -ystepB
+
+            # Collision check with player 1
             if (xposB-3 <= (xpos1 + playerWidth)):
-                if (yposB+ballHeight > ypos1) and (yposB < ypos1+playerHeight):
+                upDist = abs(yposB + ballHeight - ypos1)
+                downDist = abs(yposB - ypos1 - playerHeight)
+                ystepBAbs = abs(ystepB)
+                
+                if (xposB - xstepB - 3 <= (xpos1 + playerWidth) and (yposB + ballHeight >= ypos1 and yposB <= ypos1 + playerHeight)):
+                    # Ball entered through top or bottom and is still inside the paddle
+                    if (upDist < downDist):  # ball is above
+                        ystepB = -ystepBAbs 
+                    else: 
+                        ystepB = +ystepBAbs
+                elif (yposB+ballHeight > ypos1) and (yposB < ypos1+playerHeight):
                     xstepB = -xstepB
+
+            # Collision check with player 2
             if ((xposB + ballWidth)+3 >= xpos2):
-                if (yposB+ballHeight > ypos2) and (yposB < ypos2+playerHeight):
+                upDist = abs(yposB + ballHeight - ypos2)
+                downDist = abs(yposB - ypos2 - playerHeight)
+                ystepBAbs = abs(ystepB)
+                
+                if (xposB + ballWidth - xstepB + 3 >= xpos2) and (yposB + ballHeight >= ypos2 and yposB <= ypos2 + playerHeight):
+                    # Ball entered through top or bottom and is still inside the paddle
+                    if (upDist < downDist):  # ball is above
+                        ystepB = -ystepBAbs 
+                    else: 
+                        ystepB = +ystepBAbs
+
+                elif (yposB+ballHeight > ypos2) and (yposB < ypos2+playerHeight):
                     xstepB = -xstepB
+            
             xposB += xstepB
             yposB += ystepB
             curRects[2] = updatePos(xposB, yposB, lastRects[2], screen, ballImg)
