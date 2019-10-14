@@ -184,15 +184,17 @@ def main(screen, playerCount):
             ypos1 -= stepP
             curRects[0] = updatePos(xpos1, ypos1, lastRects[0], screen, playerImg)
             lastRects[0] = curRects[0]    
+        
         # Second player
-        if downPressed and ypos2 <= screenHeight - stepP - (playerHeight//2):
-            ypos2 += stepP
-            curRects[1] = updatePos(xpos2, ypos2, lastRects[1], screen, playerImg)
-            lastRects[1] = curRects[1]
-        if upPressed and ypos2 >= 0 + stepP - (playerHeight//2):
-            ypos2 -= stepP
-            curRects[1] = updatePos(xpos2, ypos2, lastRects[1], screen, playerImg)
-            lastRects[1] = curRects[1]
+        if playerCount == 2:
+            if downPressed and ypos2 <= screenHeight - stepP - (playerHeight//2):
+                ypos2 += stepP
+                curRects[1] = updatePos(xpos2, ypos2, lastRects[1], screen, playerImg)
+                lastRects[1] = curRects[1]
+            if upPressed and ypos2 >= 0 + stepP - (playerHeight//2):
+                ypos2 -= stepP
+                curRects[1] = updatePos(xpos2, ypos2, lastRects[1], screen, playerImg)
+                lastRects[1] = curRects[1]
 
 
 if __name__ == "__main__":  # Only if the script is called as main script not if its imported as a module
