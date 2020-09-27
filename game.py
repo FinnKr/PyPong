@@ -121,6 +121,15 @@ def main(screen, playerCount):
 
             # Collision check with player 1
             if (xposB-3 <= (xpos1 + playerWidth)):
+
+                if (yposB+ballHeight > ypos1) and (yposB < ypos1+playerHeight):
+                    xAccelerator = 1 if xstepB > 1 else -1
+                    xstepB = (-xstepB - xAccelerator)
+            if ((xposB + ballWidth)+3 >= xpos2):
+                if (yposB+ballHeight > ypos2) and (yposB < ypos2+playerHeight):
+                    yAccelerator = 1 if ystepB > 1 else -1
+                    xstepB = (-xstepB - yAccelerator)
+
                 upDist = abs(yposB + ballHeight - ypos1)
                 downDist = abs(yposB - ypos1 - playerHeight)
                 ystepBAbs = abs(ystepB)
