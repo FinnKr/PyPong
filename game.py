@@ -120,10 +120,13 @@ def main(screen, playerCount):
                 ystepB = -ystepB
             if (xposB-3 <= (xpos1 + playerWidth)):
                 if (yposB+ballHeight > ypos1) and (yposB < ypos1+playerHeight):
-                    xstepB = -xstepB
+                    xAccelerator = 1 if xstepB > 1 else -1
+                    xstepB = (-xstepB - xAccelerator)
             if ((xposB + ballWidth)+3 >= xpos2):
                 if (yposB+ballHeight > ypos2) and (yposB < ypos2+playerHeight):
-                    xstepB = -xstepB
+                    yAccelerator = 1 if ystepB > 1 else -1
+                    xstepB = (-xstepB - yAccelerator)
+            
             xposB += xstepB
             yposB += ystepB
             curRects[2] = updatePos(xposB, yposB, lastRects[2], screen, ballImg)
