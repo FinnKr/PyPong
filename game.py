@@ -118,7 +118,10 @@ def main(screen, playerCount):
                 yposB = screenHeight/2 - ballHeight/2 - ystepB
             if (yposB >= screenHeight) or (yposB <= 0):
                 ystepB = -ystepB
+
+            # Collision check with player 1
             if (xposB-3 <= (xpos1 + playerWidth)):
+
                 if (yposB+ballHeight > ypos1) and (yposB < ypos1+playerHeight):
                     xAccelerator = 1 if xstepB > 1 else -1
                     xstepB = (-xstepB - xAccelerator)
@@ -126,6 +129,35 @@ def main(screen, playerCount):
                 if (yposB+ballHeight > ypos2) and (yposB < ypos2+playerHeight):
                     yAccelerator = 1 if ystepB > 1 else -1
                     xstepB = (-xstepB - yAccelerator)
+
+                upDist = abs(yposB + ballHeight - ypos1)
+                downDist = abs(yposB - ypos1 - playerHeight)
+                ystepBAbs = abs(ystepB)
+                
+                if (xposB - xstepB - 3 <= (xpos1 + playerWidth) and (yposB + ballHeight >= ypos1 and yposB <= ypos1 + playerHeight)):
+                    # Ball entered through top or bottom and is still inside the paddle
+                    if (upDist < downDist):  # ball is above
+                        ystepB = -ystepBAbs 
+                    else: 
+                        ystepB = +ystepBAbs
+                elif (yposB+ballHeight > ypos1) and (yposB < ypos1+playerHeight):
+                    xstepB = -xstepB
+
+            # Collision check with player 2
+            if ((xposB + ballWidth)+3 >= xpos2):
+                upDist = abs(yposB + ballHeight - ypos2)
+                downDist = abs(yposB - ypos2 - playerHeight)
+                ystepBAbs = abs(ystepB)
+                
+                if (xposB + ballWidth - xstepB + 3 >= xpos2) and (yposB + ballHeight >= ypos2 and yposB <= ypos2 + playerHeight):
+                    # Ball entered through top or bottom and is still inside the paddle
+                    if (upDist < downDist):  # ball is above
+                        ystepB = -ystepBAbs 
+                    else: 
+                        ystepB = +ystepBAbs
+
+                elif (yposB+ballHeight > ypos2) and (yposB < ypos2+playerHeight):
+                    xstepB = -xstepB
             
             xposB += xstepB
             yposB += ystepB
@@ -187,15 +219,17 @@ def main(screen, playerCount):
             ypos1 -= stepP
             curRects[0] = updatePos(xpos1, ypos1, lastRects[0], screen, playerImg)
             lastRects[0] = curRects[0]    
+        
         # Second player
-        if downPressed and ypos2 <= screenHeight - stepP - (playerHeight//2):
-            ypos2 += stepP
-            curRects[1] = updatePos(xpos2, ypos2, lastRects[1], screen, playerImg)
-            lastRects[1] = curRects[1]
-        if upPressed and ypos2 >= 0 + stepP - (playerHeight//2):
-            ypos2 -= stepP
-            curRects[1] = updatePos(xpos2, ypos2, lastRects[1], screen, playerImg)
-            lastRects[1] = curRects[1]
+        if playerCount == 2:
+            if downPressed and ypos2 <= screenHeight - stepP - (playerHeight//2):
+                ypos2 += stepP
+                curRects[1] = updatePos(xpos2, ypos2, lastRects[1], screen, playerImg)
+                lastRects[1] = curRects[1]
+            if upPressed and ypos2 >= 0 + stepP - (playerHeight//2):
+                ypos2 -= stepP
+                curRects[1] = updatePos(xpos2, ypos2, lastRects[1], screen, playerImg)
+                lastRects[1] = curRects[1]
 
 
 if __name__ == "__main__":  # Only if the script is called as main script not if its imported as a module
