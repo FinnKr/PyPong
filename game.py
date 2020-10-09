@@ -57,6 +57,12 @@ def settings(screen):
     ystepB = 4
     playerNumber = 1
 
+    renderAndUpdate(screen, str(xstepB), ownWhite, ownBlack, (screenWidth//2, 20 + 20*settingsIterator + settingsText.get_height()))
+    time.sleep(0.1)
+    renderAndUpdate(screen, str(playerNumber), ownWhite, ownBlack, (screenWidth//2, 40 + 20*settingsIterator + settingsText.get_height()))
+    time.sleep(0.1)
+    renderAndUpdate(screen, str(playerSpeed), ownWhite, ownBlack, (screenWidth//2, 60 + 20*settingsIterator + settingsText.get_height()))
+
     while not done:
         time.sleep(0.1)
         for event in pygame.event.get():
