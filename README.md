@@ -9,3 +9,7 @@ You can either play against a bot or against a second player.
   ----------------- | -----------------
   w / arrow UP      |     move UP
   s / arrow DOWN    |     move DOWN
+
+--
+
+If you're a ``wayland`` user just set global variable ``SDL_VIDEODRIVER=x11`` to run it using ``XWayland`` or wait until ``pygame`` will support ``wayland`` natively
