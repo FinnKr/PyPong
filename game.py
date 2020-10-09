@@ -3,8 +3,19 @@ import pygame
 import time
 
 # ---Global variables---
-screenWidth = 800
-screenHeight = 400
+
+
+from argparse import ArgumentParser
+
+parser = ArgumentParser()
+parser.add_argument("-W", "--width", dest="width", type=int, metavar="WIDTH", help="Set window width", default=800)
+parser.add_argument("-H", "--height", dest="height", type=int, metavar="HEIGHT", help="Set window height", default=400)
+
+args = parser.parse_args()
+
+screenWidth = args.width
+screenHeight = args.height
+
 goals = [0, 0]
 
 ownBlack = (0, 0, 0)
