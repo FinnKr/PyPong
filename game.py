@@ -3,8 +3,19 @@ import pygame
 import time
 
 # ---Global variables---
-screenWidth = 800
-screenHeight = 400
+
+
+from argparse import ArgumentParser
+
+parser = ArgumentParser()
+parser.add_argument("-W", "--width", dest="width", type=int, metavar="WIDTH", help="Set window width", default=800)
+parser.add_argument("-H", "--height", dest="height", type=int, metavar="HEIGHT", help="Set window height", default=400)
+
+args = parser.parse_args()
+
+screenWidth = args.width
+screenHeight = args.height
+
 goals = [0, 0]
 
 ownBlack = (0, 0, 0)
@@ -45,6 +56,12 @@ def settings(screen):
     xstepB = 4          # "Speed" of the ball
     ystepB = 4
     playerNumber = 1
+
+    renderAndUpdate(screen, str(xstepB), ownWhite, ownBlack, (screenWidth//2, 20 + 20*settingsIterator + settingsText.get_height()))
+    time.sleep(0.1)
+    renderAndUpdate(screen, str(playerNumber), ownWhite, ownBlack, (screenWidth//2, 40 + 20*settingsIterator + settingsText.get_height()))
+    time.sleep(0.1)
+    renderAndUpdate(screen, str(playerSpeed), ownWhite, ownBlack, (screenWidth//2, 60 + 20*settingsIterator + settingsText.get_height()))
 
     while not done:
         time.sleep(0.1)
