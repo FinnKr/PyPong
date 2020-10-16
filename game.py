@@ -154,12 +154,15 @@ def updatePos(xPos, yPos, oldRect, screen, image):
     goalText = font.render(str(goals[0]) + " : " + str(goals[1]), True, (255, 255, 255), (0, 0, 0))
     pygame.display.update(updatedRect)
     pygame.display.update(oldRect)
-    pygame.display.update(screen.blit(goalText, (screenWidth / 2 - goalText.get_width() / 2, 10)))
+    pygame.display.update(screen.blit(goalText, (screenWidth // 2 - goalText.get_width() // 2, 10)))
     return updatedRect
 
 
 # -----Main function--------------
 def main(screen, playerCount, ballSpeed, playerSpeed):
+
+    clock = pygame.time.Clock()
+
     xstepB = ballSpeed
     ystepB = ballSpeed
     running = True  # Variable for main loop control
@@ -200,7 +203,8 @@ def main(screen, playerCount, ballSpeed, playerSpeed):
     # -----main loop-----
     while running:
         # ---event handling, gets all events from event queue---
-        time.sleep(0.03)
+        print(int(clock.get_fps()))
+        clock.tick(60)
         if not firstStart:
             if (xposB >= screenWidth) or (xposB <= 0):
                 firstStart = True
@@ -208,8 +212,8 @@ def main(screen, playerCount, ballSpeed, playerSpeed):
                     goals[0] += 1
                 else:
                     goals[1] += 1
-                xposB = screenWidth/2 - ballWidth/2 - xstepB
-                yposB = screenHeight/2 - ballHeight/2 - ystepB
+                xposB = screenWidth//2 - ballWidth//2 - xstepB
+                yposB = screenHeight//2 - ballHeight//2 - ystepB
             if (yposB >= screenHeight) or (yposB <= 0):
                 ystepB = -ystepB
 
