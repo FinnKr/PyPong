@@ -10,11 +10,13 @@ from argparse import ArgumentParser
 parser = ArgumentParser()
 parser.add_argument("-W", "--width", dest="width", type=int, metavar="WIDTH", help="Set window width", default=800)
 parser.add_argument("-H", "--height", dest="height", type=int, metavar="HEIGHT", help="Set window height", default=400)
+parser.add_argument("-fps", "--framerate", dest="framerate", type=int, metavar="FRAMERATE", help="Set desired framerate", default=60)
 
 args = parser.parse_args()
 
 screenWidth = args.width
 screenHeight = args.height
+FPS = args.framerate
 
 goals = [0, 0]
 
@@ -203,8 +205,8 @@ def main(screen, playerCount, ballSpeed, playerSpeed):
     # -----main loop-----
     while running:
         # ---event handling, gets all events from event queue---
-        print(int(clock.get_fps()))
-        clock.tick(60)
+        print(int(clock.get_fps()), "of", FPS)
+        clock.tick(FPS)
         if not firstStart:
             if (xposB >= screenWidth) or (xposB <= 0):
                 firstStart = True
