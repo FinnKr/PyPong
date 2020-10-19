@@ -152,6 +152,10 @@ def settings(screen):
 # -----Updating display with a text-----
 def renderAndUpdate(screen, text, textColor, backgroundColor, pos):
     font = pygame.font.SysFont("arialroundedmtbold", 24)
+    if len(text) == 2:
+        text += "  "
+    elif len(text) == 1:
+        text += "   "
     valueText = font.render(text, True, textColor, backgroundColor)
     screen.blit(valueText, pos)
     pygame.display.flip()
@@ -211,7 +215,6 @@ def main(screen, playerCount, ballSpeed, playerSpeed):
     # -----main loop-----
     while running:
         # ---event handling, gets all events from event queue---
-        print(int(clock.get_fps()), "of", FPS)
         clock.tick(FPS)
 
         if not firstStart:
