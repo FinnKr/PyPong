@@ -309,13 +309,13 @@ def main(screen, playerCount, ballSpeed, playerSpeed):
 
             # --- Bot for one player gaming --- #
         if playerCount == 1:
-            if yposB + 1 + playerSpeed > ypos2:
+            if yposB > ypos2 + playerSpeed and ypos2 <= screenHeight - playerSpeed - playerHeight:
                 # upPressed = False
                 # downPressed = True
                 ypos2 += playerSpeed
                 curRects[1] = updatePos(xpos2, ypos2, lastRects[1], screen, playerImg)
                 lastRects[1] = curRects[1]
-            if yposB - 1 - playerSpeed < ypos2:
+            elif yposB < ypos2 - playerSpeed and ypos2 >= playerSpeed - playerHeight:
                 # downPressed = False
                 # upPressed = True
                 ypos2 -= playerSpeed
