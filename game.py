@@ -324,11 +324,11 @@ def main(screen, playerCount, ballSpeed, playerSpeed):
 
         # Actually moves the players if a key is pressed
         # First player
-        if sPressed and ypos1 <= screenHeight - playerSpeed - (playerHeight // 2):
+        if sPressed and ypos1 <= screenHeight - playerSpeed - playerHeight:
             ypos1 += playerSpeed
             curRects[0] = updatePos(xpos1, ypos1, lastRects[0], screen, playerImg)
             lastRects[0] = curRects[0]
-        if wPressed and ypos1 >= 0 + playerSpeed - (playerHeight // 2):
+        if wPressed and ypos1 >= playerSpeed:
             ypos1 -= playerSpeed
             curRects[0] = updatePos(xpos1, ypos1, lastRects[0], screen, playerImg)
             lastRects[0] = curRects[0]
