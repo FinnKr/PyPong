@@ -338,11 +338,11 @@ def main(screen, playerCount, ballSpeed, playerSpeed):
 
             # Second player
         if playerCount == 2:
-            if downPressed and ypos2 <= screenHeight - playerSpeed - (playerHeight // 2):
+            if downPressed and ypos2 <= screenHeight - playerSpeed - playerHeight:
                 ypos2 += playerSpeed
                 curRects[1] = updatePos(xpos2, ypos2, lastRects[1], screen, playerImg)
                 lastRects[1] = curRects[1]
-            if upPressed and ypos2 >= 0 + playerSpeed - (playerHeight // 2):
+            if upPressed and ypos2 >= playerSpeed:
                 ypos2 -= playerSpeed
                 curRects[1] = updatePos(xpos2, ypos2, lastRects[1], screen, playerImg)
                 lastRects[1] = curRects[1]
