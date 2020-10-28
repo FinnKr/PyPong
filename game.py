@@ -1,6 +1,7 @@
 # -----imports-----
 import pygame
 import time
+from pygame import mixer
 
 # ---Global variables---
 
@@ -145,6 +146,9 @@ def settings(screen):
                 pygame.display.flip()
 
     if startgame:
+        pygame.mixer.init()
+        playerMusic = pygame.mixer.music.load('resources/gamemusic.mp3')
+        pygame.mixer.music.play(-1)
         screen.fill((0, 0, 0))
         main(screen, playerNumber, xstepB, playerSpeed)
 
