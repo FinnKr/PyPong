@@ -13,17 +13,26 @@ parser.add_argument("-W", "--width", dest="width", type=int, metavar="WIDTH", he
 parser.add_argument("-H", "--height", dest="height", type=int, metavar="HEIGHT", help="Set window height", default=400)
 parser.add_argument("-fps", "--framerate", dest="framerate", type=int, metavar="FRAMERATE",
                     help="Set desired framerate", default=60)
+parser.add_argument("-fc", "--flipcolors", dest="sc", action="store_true", help="Flip black and white for another look of the game")
+parser.set_defaults(fc=False)
 
 args = parser.parse_args()
 
 screenWidth = args.width
 screenHeight = args.height
 FPS = args.framerate
+flipcolors = args.fc
 
 goals = [0, 0]
 
-ownBlack = (0, 0, 0)
-ownWhite = (255, 255, 255)
+# flip black and white if the flipcolors option is set
+if(flipcolors):
+    ownBlack = (255, 255, 255)
+    ownWhite = (0, 0, 0)
+else:
+    ownBlack = (0, 0, 0)
+    ownWhite = (255, 255, 255)
+
 ownRed = (255, 0, 0)
 
 
@@ -35,13 +44,14 @@ def init():
     pygame.display.set_caption("Pong")  # Set window Title
     screen = pygame.display.set_mode(
         (screenWidth, screenHeight))  # Surface on screen with size of screenWidth x screenHeight
+    screen.fill(ownBlack)
     settings(screen)
 
 
 # -----Settings-----
 def settings(screen):
     font = pygame.font.SysFont("arialroundedmtbold", 24)
-    settingsText = font.render("Settings", True, (255, 255, 255))
+    settingsText = font.render("Settings", True, ownWhite)
     screen.blit(settingsText, (screenWidth // 2 - settingsText.get_width() // 2, 10))
     pygame.display.flip()
 
@@ -149,7 +159,7 @@ def settings(screen):
         pygame.mixer.init()
         playerMusic = pygame.mixer.music.load('resources/gamemusic.mp3')
         pygame.mixer.music.play(-1)
-        screen.fill((0, 0, 0))
+        screen.fill(ownBlack)
         main(screen, playerNumber, xstepB, playerSpeed)
 
 
@@ -167,10 +177,10 @@ def renderAndUpdate(screen, text, textColor, backgroundColor, pos):
 
 # -----Update positions----- 
 def updatePos(xPos, yPos, oldRect, screen, image):
-    screen.fill((0, 0, 0))
+    screen.fill(ownBlack)
     updatedRect = screen.blit(image, (xPos, yPos))
     font = pygame.font.SysFont("arialroundedmtbold", 18)
-    goalText = font.render(str(goals[0]) + " : " + str(goals[1]), True, (255, 255, 255), (0, 0, 0))
+    goalText = font.render(str(goals[0]) + " : " + str(goals[1]), True, ownWhite, ownBlack)
     pygame.display.update(updatedRect)
     pygame.display.update(oldRect)
     pygame.display.update(screen.blit(goalText, (screenWidth // 2 - goalText.get_width() // 2, 10)))
@@ -188,7 +198,7 @@ def main(screen, playerCount, ballSpeed, playerSpeed):
     playerImg = pygame.image.load("resources/player.png")  # Load the player image
     ballImg = pygame.image.load("resources/ball.png")
 
-    screen.fill((0, 0, 0))  # Fill the background with one colour (black)
+    screen.fill(ownBlack)  # Fill the background with one colour (black)
 
     playerWidth = playerImg.get_width()  # Width of the player
     playerHeight = playerImg.get_height()  # Height of the player
