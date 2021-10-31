@@ -63,17 +63,22 @@ def settings(screen):
         "Initial speed of the ball",
         "Number of players",
         "Moving speed of the players",
+        "Ball size",
+        "Paddle Length",
         "DONE"
     ]
     settingsIterator = 0
     settingsLength = len(settingsList)
 
     playerSpeed = 10  # Pixels the player moves per frame (speed)
-    xstepB = 4  # "Speed" of the ball
-    ystepB = 4
+    ballSpeed = 4  # "Speed" of the ball
+    ballSize = 1
     playerNumber = 1
+    paddleLength = 1
+    lengthText = ["Short    ", "Normal", "Long     "] # Extra whitespace is to clear background when text changes
 
-    renderAndUpdate(screen, str(xstepB), ownWhite, ownBlack,
+
+    renderAndUpdate(screen, str(ballSpeed), ownWhite, ownBlack,
                     (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
     time.sleep(0.1)
     renderAndUpdate(screen, str(playerNumber), ownWhite, ownBlack,
@@ -81,6 +86,12 @@ def settings(screen):
     time.sleep(0.1)
     renderAndUpdate(screen, str(playerSpeed), ownWhite, ownBlack,
                     (screenWidth // 2, 60 + 20 * settingsIterator + settingsText.get_height()))
+    time.sleep(0.1)
+    renderAndUpdate(screen, str(ballSize), ownWhite, ownBlack,
+                    (screenWidth // 2, 80 + 20 * settingsIterator + settingsText.get_height()))
+    time.sleep(0.1)
+    renderAndUpdate(screen, str(lengthText[paddleLength]), ownWhite, ownBlack,
+                    (screenWidth // 2, 100 + 20 * settingsIterator + settingsText.get_height()))
 
     while not done:
         time.sleep(0.1)
@@ -102,9 +113,8 @@ def settings(screen):
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 # determining which setting is selected and increasing (or decreasing value of that setting)
                 if settingsIterator == 0:
-                    xstepB += 1
-                    ystepB += 1
-                    renderAndUpdate(screen, str(xstepB), ownWhite, ownBlack,
+                    ballSpeed += 1
+                    renderAndUpdate(screen, str(ballSpeed), ownWhite, ownBlack,
                                     (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
                 elif settingsIterator == 1:
                     if playerNumber == 1:
@@ -117,13 +127,23 @@ def settings(screen):
                     playerSpeed += 1
                     renderAndUpdate(screen, str(playerSpeed), ownWhite, ownBlack,
                                     (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
+                elif settingsIterator == 3:
+                    if (ballSize < 10):
+                        ballSize += 1
+                    renderAndUpdate(screen, str(ballSize), ownWhite, ownBlack,
+                                    (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
+                elif settingsIterator == 4:
+                    paddleLength += 1
+                    if (paddleLength > 2):
+                        paddleLength = 0
+                    renderAndUpdate(screen, str(lengthText[paddleLength]), ownWhite, ownBlack,
+                                    (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 if settingsIterator == 0:
-                    xstepB -= 1
-                    ystepB -= 1
-                    if xstepB == 0:
-                        xstepB = ystepB = 1
-                    renderAndUpdate(screen, str(xstepB), ownWhite, ownBlack,
+                    ballSpeed -= 1
+                    if ballSpeed == 0:
+                        ballSpeed = 1
+                    renderAndUpdate(screen, str(ballSpeed), ownWhite, ownBlack,
                                     (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
                 elif settingsIterator == 1:
                     if playerNumber == 1:
@@ -138,10 +158,21 @@ def settings(screen):
                         playerSpeed = 1
                     renderAndUpdate(screen, str(playerSpeed), ownWhite, ownBlack,
                                     (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
+                elif settingsIterator == 3:
+                    if (ballSize > 1):
+                        ballSize -= 1
+                    renderAndUpdate(screen, str(ballSize), ownWhite, ownBlack,
+                                    (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
+                elif settingsIterator == 4:
+                    paddleLength -= 1
+                    if (paddleLength < 0):
+                        paddleLength = 2
+                    renderAndUpdate(screen, str(lengthText[paddleLength]), ownWhite, ownBlack,
+                                    (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
 
             # if option "done" is selected and the return key is pressed the main function is called
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                if settingsIterator == 3:
+                if settingsIterator == settingsLength - 1: # True on the last setting in the list
                     done = True
                     startgame = True
 
@@ -162,7 +193,7 @@ def settings(screen):
             playerMusic = pygame.mixer.music.load('resources/gamemusic.mp3')
             pygame.mixer.music.play(-1)
         screen.fill(ownBlack)
-        main(screen, playerNumber, xstepB, playerSpeed)
+        main(screen, playerNumber, ballSpeed, playerSpeed, ballSize, paddleLength)
 
 
 # -----Updating display with a text-----
@@ -190,7 +221,7 @@ def updatePos(xPos, yPos, oldRect, screen, image):
 
 
 # -----Main function--------------
-def main(screen, playerCount, ballSpeed, playerSpeed):
+def main(screen, playerCount, ballSpeed, playerSpeed, ballSize, paddleLength):
     clock = pygame.time.Clock()
 
     xstepB = ballSpeed
@@ -198,7 +229,10 @@ def main(screen, playerCount, ballSpeed, playerSpeed):
     running = True  # Variable for main loop control
 
     playerImg = pygame.image.load("resources/player.png")  # Load the player image
+    playerImg = pygame.transform.scale(playerImg, (playerImg.get_size()[0],
+                                       (int) (playerImg.get_size()[1] * [0.66, 1.0, 1.5][paddleLength]))) # Set the paddle length
     ballImg = pygame.image.load("resources/ball.png")
+    ballImg = pygame.transform.scale(ballImg, [x * ballSize for x in ballImg.get_size()]) # Set the ball size
 
     screen.fill(ownBlack)  # Fill the background with one colour (black)
 
@@ -252,7 +286,7 @@ def main(screen, playerCount, ballSpeed, playerSpeed):
                 ystepB = ballSpeed
 
             # reversing ball if its out of the window (top or bottom)
-            if (yposB >= screenHeight) or (yposB <= 0):
+            if (yposB + ballHeight >= screenHeight) or (yposB <= 0): 
                 ystepB = -ystepB
 
             # Collision check with player 1
