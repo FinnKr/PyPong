@@ -14,7 +14,8 @@ parser.add_argument("-W", "--width", dest="width", type=int, metavar="WIDTH", he
 parser.add_argument("-H", "--height", dest="height", type=int, metavar="HEIGHT", help="Set window height", default=400)
 parser.add_argument("-fps", "--framerate", dest="framerate", type=int, metavar="FRAMERATE",
                     help="Set desired framerate", default=60)
-parser.add_argument("-fc", "--flipcolors", dest="sc", action="store_true", help="Flip black and white for another look of the game")
+parser.add_argument("-fc", "--flipcolors", dest="fc", action="store_true", help="Flip black and white for another look of the game")
+parser.add_argument("-sc", "--setcolor", dest="setcolors", type=int, default=0, help="Set color scheme using predefined setups. Values go from 0 to 5.")
 parser.set_defaults(fc=False)
 
 args = parser.parse_args()
@@ -23,19 +24,55 @@ screenWidth = args.width
 screenHeight = args.height
 FPS = args.framerate
 flipcolors = args.fc
+setcolors = args.setcolors
 
 goals = [0, 0]
 
+# colors
+ownYellow = (230, 255, 0)
+ownDarkBlue = (0, 10, 130)
+ownBlue = (0,0,255)
+ownMagenta = (199, 18, 145)
+ownGreen = (0,255,0)
+ownOrange = (255, 94, 0)
+ownBlack = (0,0,0)
+ownWhite = (255,255,255)
+ownRed = (255,0,0)
+
+colorSchemes = {
+    0: {
+        "first": ownBlack,
+        "second": ownWhite
+    },
+    1: {
+        "first": ownWhite,
+        "second": ownBlack
+    },
+    2: {
+        "first": ownBlack,
+        "second": ownYellow
+    },
+    3: {
+        "first": ownBlack,
+        "second": ownRed
+    },
+    4: {
+        "first": ownBlack,
+        "second": ownBlue
+    },
+    5: {
+        "first": ownBlack,
+        "second": ownGreen
+    }
+}
+
+
 # flip black and white if the flipcolors option is set
 if(flipcolors):
-    ownBlack = (255, 255, 255)
-    ownWhite = (0, 0, 0)
-else:
-    ownBlack = (0, 0, 0)
-    ownWhite = (255, 255, 255)
+    setcolors = 1
 
-ownRed = (255, 0, 0)
-
+firstColor = colorSchemes[setcolors]["first"]
+secondColor = colorSchemes[setcolors]["second"]
 
 # -----Initializing the game-------
 def init():
@@ -45,14 +82,14 @@ def init():
     pygame.display.set_caption("Pong")  # Set window Title
     screen = pygame.display.set_mode(
         (screenWidth, screenHeight))  # Surface on screen with size of screenWidth x screenHeight
-    screen.fill(ownBlack)
+    screen.fill(firstColor)
     settings(screen)
 
 
 # -----Settings-----
 def settings(screen):
     font = pygame.font.SysFont("arialroundedmtbold", 24)
-    settingsText = font.render("Settings", True, ownWhite)
+    settingsText = font.render("Settings", True, secondColor)
     screen.blit(settingsText, (screenWidth // 2 - settingsText.get_width() // 2, 10))
     pygame.display.flip()
 
@@ -78,19 +115,19 @@ def settings(screen):
     lengthText = ["Short    ", "Normal", "Long     "] # Extra whitespace is to clear background when text changes
 
 
-    renderAndUpdate(screen, str(ballSpeed), ownWhite, ownBlack,
+    renderAndUpdate(screen, str(ballSpeed), secondColor, firstColor,
                     (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
     time.sleep(0.1)
-    renderAndUpdate(screen, str(playerNumber), ownWhite, ownBlack,
+    renderAndUpdate(screen, str(playerNumber), secondColor, firstColor,
                     (screenWidth // 2, 40 + 20 * settingsIterator + settingsText.get_height()))
     time.sleep(0.1)
-    renderAndUpdate(screen, str(playerSpeed), ownWhite, ownBlack,
+    renderAndUpdate(screen, str(playerSpeed), secondColor, firstColor,
                     (screenWidth // 2, 60 + 20 * settingsIterator + settingsText.get_height()))
     time.sleep(0.1)
-    renderAndUpdate(screen, str(ballSize), ownWhite, ownBlack,
+    renderAndUpdate(screen, str(ballSize), secondColor, firstColor,
                     (screenWidth // 2, 80 + 20 * settingsIterator + settingsText.get_height()))
     time.sleep(0.1)
-    renderAndUpdate(screen, str(lengthText[paddleLength]), ownWhite, ownBlack,
+    renderAndUpdate(screen, str(lengthText[paddleLength]), secondColor, firstColor,
                     (screenWidth // 2, 100 + 20 * settingsIterator + settingsText.get_height()))
 
     while not done:
@@ -114,60 +151,60 @@ def settings(screen):
                 # determining which setting is selected and increasing (or decreasing value of that setting)
                 if settingsIterator == 0:
                     ballSpeed += 1
-                    renderAndUpdate(screen, str(ballSpeed), ownWhite, ownBlack,
+                    renderAndUpdate(screen, str(ballSpeed), secondColor, firstColor,
                                     (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
                 elif settingsIterator == 1:
                     if playerNumber == 1:
                         playerNumber = 2
                     else:
                         playerNumber = 1
-                    renderAndUpdate(screen, str(playerNumber), ownWhite, ownBlack,
+                    renderAndUpdate(screen, str(playerNumber), secondColor, firstColor,
                                     (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
                 elif settingsIterator == 2:
                     playerSpeed += 1
-                    renderAndUpdate(screen, str(playerSpeed), ownWhite, ownBlack,
+                    renderAndUpdate(screen, str(playerSpeed), secondColor, firstColor,
                                     (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
                 elif settingsIterator == 3:
                     if (ballSize < 10):
                         ballSize += 1
-                    renderAndUpdate(screen, str(ballSize), ownWhite, ownBlack,
+                    renderAndUpdate(screen, str(ballSize), secondColor, firstColor,
                                     (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
                 elif settingsIterator == 4:
                     paddleLength += 1
                     if (paddleLength > 2):
                         paddleLength = 0
-                    renderAndUpdate(screen, str(lengthText[paddleLength]), ownWhite, ownBlack,
+                    renderAndUpdate(screen, str(lengthText[paddleLength]), secondColor, firstColor,
                                     (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 if settingsIterator == 0:
                     ballSpeed -= 1
                     if ballSpeed == 0:
                         ballSpeed = 1
-                    renderAndUpdate(screen, str(ballSpeed), ownWhite, ownBlack,
+                    renderAndUpdate(screen, str(ballSpeed), secondColor, firstColor,
                                     (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
                 elif settingsIterator == 1:
                     if playerNumber == 1:
                         playerNumber = 2
                     else:
                         playerNumber = 1
-                    renderAndUpdate(screen, str(playerNumber), ownWhite, ownBlack,
+                    renderAndUpdate(screen, str(playerNumber), secondColor, firstColor,
                                     (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
                 elif settingsIterator == 2:
                     playerSpeed -= 1
                     if playerSpeed == 0:
                         playerSpeed = 1
-                    renderAndUpdate(screen, str(playerSpeed), ownWhite, ownBlack,
+                    renderAndUpdate(screen, str(playerSpeed), secondColor, firstColor,
                                     (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
                 elif settingsIterator == 3:
                     if (ballSize > 1):
                         ballSize -= 1
-                    renderAndUpdate(screen, str(ballSize), ownWhite, ownBlack,
+                    renderAndUpdate(screen, str(ballSize), secondColor, firstColor,
                                     (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
                 elif settingsIterator == 4:
                     paddleLength -= 1
                     if (paddleLength < 0):
                         paddleLength = 2
-                    renderAndUpdate(screen, str(lengthText[paddleLength]), ownWhite, ownBlack,
+                    renderAndUpdate(screen, str(lengthText[paddleLength]), secondColor, firstColor,
                                     (screenWidth // 2, 20 + 20 * settingsIterator + settingsText.get_height()))
 
             # if option "done" is selected and the return key is pressed the main function is called
@@ -179,11 +216,11 @@ def settings(screen):
         # rendering the (selected) settings
         for i in range(settingsLength):
             if i == settingsIterator:
-                setText = font.render(settingsList[i], True, ownBlack, ownWhite)
+                setText = font.render(settingsList[i], True, firstColor, secondColor)
                 screen.blit(setText, (10, 20 + 20 * i + setText.get_height()))
                 pygame.display.flip()
             else:
-                setText = font.render(settingsList[i], True, ownWhite, ownBlack)
+                setText = font.render(settingsList[i], True, secondColor, firstColor)
                 screen.blit(setText, (10, 20 + 20 * i + setText.get_height()))
                 pygame.display.flip()
 
@@ -192,7 +229,7 @@ def settings(screen):
             pygame.mixer.init()
             playerMusic = pygame.mixer.music.load('resources/gamemusic.mp3')
             pygame.mixer.music.play(-1)
-        screen.fill(ownBlack)
+        screen.fill(firstColor)
         main(screen, playerNumber, ballSpeed, playerSpeed, ballSize, paddleLength)
 
 
@@ -210,10 +247,10 @@ def renderAndUpdate(screen, text, textColor, backgroundColor, pos):
 
 # -----Update positions----- 
 def updatePos(xPos, yPos, oldRect, screen, image):
-    screen.fill(ownBlack)
+    screen.fill(firstColor)
     updatedRect = screen.blit(image, (xPos, yPos))
     font = pygame.font.SysFont("arialroundedmtbold", 18)
-    goalText = font.render(str(goals[0]) + " : " + str(goals[1]), True, ownWhite, ownBlack)
+    goalText = font.render(str(goals[0]) + " : " + str(goals[1]), True, secondColor, firstColor)
     pygame.display.update(updatedRect)
     pygame.display.update(oldRect)
     pygame.display.update(screen.blit(goalText, (screenWidth // 2 - goalText.get_width() // 2, 10)))
@@ -234,7 +271,7 @@ def main(screen, playerCount, ballSpeed, playerSpeed, ballSize, paddleLength):
     ballImg = pygame.image.load("resources/ball.png")
     ballImg = pygame.transform.scale(ballImg, [x * ballSize for x in ballImg.get_size()]) # Set the ball size
 
-    screen.fill(ownBlack)  # Fill the background with one colour (black)
+    screen.fill(firstColor)  # Fill the background with one colour (black)
 
     playerWidth = playerImg.get_width()  # Width of the player
     playerHeight = playerImg.get_height()  # Height of the player
