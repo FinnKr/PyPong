@@ -3,6 +3,7 @@ import pygame
 import time
 from pygame import mixer
 from os.path import exists
+import sys
 
 # ---Global variables---
 
@@ -15,16 +16,25 @@ parser.add_argument("-H", "--height", dest="height", type=int, metavar="HEIGHT",
 parser.add_argument("-fps", "--framerate", dest="framerate", type=int, metavar="FRAMERATE",
                     help="Set desired framerate", default=60)
 parser.add_argument("-fc", "--flipcolors", dest="fc", action="store_true", help="Flip black and white for another look of the game")
-parser.add_argument("-sc", "--setcolor", dest="setcolors", type=int, default=0, help="Set color scheme using predefined setups. Values go from 0 to 5.")
+parser.add_argument("-sc", "--setcolor", dest="setcolors", type=int, default=0, help="Set color scheme using predefined setups. Values go from 0 to 9.")
+parser.add_argument("-sfc", "--setfirstcolor", dest="setfirstcolor", type=str, default="black", help="Set the first color using basic color names.")
+parser.add_argument("-ssc", "--setsecondcolor", dest="setsecondcolor", type=str, default="white", help="Set the second color using basic color names.")
+
 parser.set_defaults(fc=False)
 
 args = parser.parse_args()
+
+if args.setcolors and (args.setfirstcolor or args.setsecondcolor):
+    print("-sc and -sfc/-ssc are mutually exclusive ...")
+    sys.exit(2)
 
 screenWidth = args.width
 screenHeight = args.height
 FPS = args.framerate
 flipcolors = args.fc
 setcolors = args.setcolors
+setFirstColor = args.setfirstcolor
+setSecondColor = args.setsecondcolor
 
 goals = [0, 0]
 
@@ -32,7 +42,8 @@ goals = [0, 0]
 ownYellow = (230, 255, 0)
 ownDarkBlue = (0, 10, 130)
 ownBlue = (0,0,255)
-ownMagenta = (199, 18, 145)
+ownPurple = (119, 0, 255)
+ownPink = (255, 0, 230)
 ownGreen = (0,255,0)
 ownOrange = (255, 94, 0)
 ownBlack = (0,0,0)
@@ -63,16 +74,59 @@ colorSchemes = {
     5: {
         "first": ownBlack,
         "second": ownGreen
+    },
+    6: {
+        "first": ownWhite,
+        "second": ownYellow
+    },
+    7: {
+        "first": ownWhite,
+        "second": ownRed
+    },
+    8: {
+        "first": ownWhite,
+        "second": ownBlue
+    },
+    9: {
+        "first": ownWhite,
+        "second": ownGreen
     }
 }
 
 
-# flip black and white if the flipcolors option is set
-if(flipcolors):
-    setcolors = 1
+colorDict = {
+    "yellow": ownYellow,
+    "orange": ownOrange,
+    "red": ownRed,
+    "purple": ownPurple,
+    "pink": ownPink,
+    "blue": ownBlue,
+    "green": ownGreen,
+    "white": ownWhite,
+    "black": ownBlack
+}
 
-firstColor = colorSchemes[setcolors]["first"]
-secondColor = colorSchemes[setcolors]["second"]
+if (args.setfirstcolor):
+    if setFirstColor in colorDict:
+        firstColor = colorDict[setFirstColor]
+    else:
+        print("A color you're trying to set does not exist here yet.")
+        sys.exit(2)
+
+if (args.setsecondcolor):
+    if setSecondColor in colorDict:
+        secondColor = colorDict[setSecondColor]
+    else:
+        print("A color you're trying to set does not exist here yet.")
+        sys.exit(2)
+
+if (args.setcolors):
+    # flip black and white if the flipcolors option is set
+    if(flipcolors):
+        setcolors = 1
+
+    firstColor = colorSchemes[setcolors]["first"]
+    secondColor = colorSchemes[setcolors]["second"]
 
 # -----Initializing the game-------
 def init():
