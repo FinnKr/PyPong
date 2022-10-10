@@ -109,10 +109,16 @@ colorDict = {
 if (args.setfirstcolor):
     if setFirstColor in colorDict:
         firstColor = colorDict[setFirstColor]
+    else:
+        print("A color you're trying to set does not exist here yet.")
+        sys.exit(2)
 
 if (args.setsecondcolor):
     if setSecondColor in colorDict:
         secondColor = colorDict[setSecondColor]
+    else:
+        print("A color you're trying to set does not exist here yet.")
+        sys.exit(2)
 
 if (args.setcolors):
     # flip black and white if the flipcolors option is set
